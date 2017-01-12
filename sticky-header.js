@@ -1,3 +1,6 @@
+var verge = require('verge');
+var jQuery = require('jquery');
+
 /**
  * Makes element sticky for mobile devices
  *
