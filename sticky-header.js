@@ -35,8 +35,17 @@ var jQuery = require('jquery');
 
         if (isSticky) {
             stickyTimer = setTimeout(function () {
-                $element.addClass("is-sticky");
-                $body.css('padding-top', stickyElementHeight);
+                $element.addClass("is-sticky");                
+                
+                if (scrollbarVerticalPosition <= stickyElementHeight) {
+                    $body.addClass('sticky-top');
+                    $element.removeClass("sticky-wrapper");
+                    $body.css('padding-top', 0);
+                } else {
+                    $body.removeClass('sticky-top');
+                    $element.addClass("sticky-wrapper");
+                    $body.css('padding-top', stickyElementHeight);
+                }                
             }, stickyTimeout);
         } else {
             stickyTimer = setTimeout(function () {
@@ -90,14 +99,6 @@ var jQuery = require('jquery');
                     || stickyType == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
                     // Scrolled to top or Scrolling down
                     makeSticky($stickyElement, $body, false);
-
-                    if (scrollbarVerticalPosition <= stickyElementHeight) {
-                        $body.addClass('sticky-top');
-                        $stickyElement.removeClass("sticky-wrapper");
-                    } else {
-                        $body.removeClass('sticky-top');
-                        $stickyElement.addClass("sticky-wrapper");                        
-                    }
                 } else {
                     // Scrolling up
                     makeSticky($stickyElement, $body, true);
