@@ -24,10 +24,10 @@ var jQuery = require('jquery');
             var $element = $(this);
             var $body = $('body');
 
-            settings.targetElement = settings.targetElement || this;
-            settings.minTop = settings.minTop || $(settings.targetElement).offset().top + $(settings.targetElement).height();
+            var targetElement = settings.targetElement || this;
+            var minTop = settings.minTop || $(targetElement).offset().top;
 
-            var stickyElementHeight = $(settings.targetElement).height();
+            var stickyElementHeight = $(targetElement).height();
 
             $(window).scroll(function (event) {
                 if (settings.minimalViewportWidth == 0 || verge.viewportW() < settings.minimalViewportWidth) {
@@ -35,13 +35,13 @@ var jQuery = require('jquery');
 
                     var isSticky = false;
 
-                    if (scrollbarVerticalPosition <= settings.minTop
+                    if (scrollbarVerticalPosition <= minTop
                         || settings.type == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
 
                         // Scrolled to top or Scrolling down
                         isSticky = false;
 
-                        if (scrollbarVerticalPosition <= settings.minTop) {
+                        if (scrollbarVerticalPosition <= minTop) {
                             // Scrolled to top
                             $body.addClass(settings.scrollTopClass);
                             $element.removeClass(settings.stickyWrapperClass);
