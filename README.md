@@ -21,7 +21,12 @@ Add `main.js` file in your theme:
 
 Content of `main.js`
 ```
-var stickyHeader = require('js-sticky-header');
+var $ = require('jquery');
+require('js-sticky-header');
+
+$(document).ready(function ($) {
+    $('header').sticky();
+});
 ```
 
 Add to your project `composer.json`:
