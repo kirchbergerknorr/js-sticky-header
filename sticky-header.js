@@ -1,111 +1,90 @@
 var verge = require('verge');
 var jQuery = require('jquery');
 
-;(function($, verge, document) {
-    // todo: convert to jQuery plugin
-    
-    var scrollbarPreviousVerticalPosition;
+;(function ($) {
+    $.fn.sticky = function( options ) {
 
-    var stickyType = "scroll-top";
-    var stickyTimer = false;
-    var isCurrentlySticky = true;
-    var minimalStickyViewportWidth = 0;
-    var stickyTimeout = 100;
-    var stickyElementHeight = 0;
-    var stickyMinTop = 0;
+        var settings = $.extend({
+            type: "scroll-top",
+            minimalViewportWidth: 0,
+            timeout: 100,
+            targetElement: '',
+            minTop: 0,
+            isStickyClass: 'is-sticky',
+            stickyWrapperClass: 'sticky-wrapper',
+            scrollTopClass: 'scroll-top'
+        }, options );
 
-    /**
-     * Make the element sticky
-     *
-     * @param {jQuery} $element
-     * @param {jQuery} $body
-     * @param {boolean} isSticky
-     */
-    function makeSticky($element, $body, isSticky) {
-        if (isCurrentlySticky == isSticky) {
-            return;
-        }
+        var intervalId = false;
+        var isCurrentlySticky = false;
+        var scrollbarPreviousVerticalPosition = 0;
 
-        if (stickyTimer) {
-            clearTimeout(stickyTimer);
-        }
+        return this.each(function() {
 
-        // todo: extract library-specific css to separate file
-        // todo: add animation to css
+            var $element = $(this);
+            var $body = $('body');
 
-        if (isSticky) {
-            stickyTimer = setTimeout(function () {
-                $element.addClass("is-sticky");
-            }, stickyTimeout);
-        } else {
-            stickyTimer = setTimeout(function () {
-                $element.removeClass("is-sticky");
-            }, stickyTimeout);
-        }
+            settings.targetElement = settings.targetElement || this;
+            settings.minTop = settings.minTop || $(settings.targetElement).offset().top + $(settings.targetElement).height();
 
-        isCurrentlySticky = isSticky;
-    }
+            var stickyElementHeight = $(settings.targetElement).height();
 
-    $(document).ready(function ($) {
-        // todo: make it work with multiple elements
-        var $stickyElement = $("[data-sticky]"),
-            $body = $('body');
-       
-        stickyElementHeight = $stickyElement.height();
-        var offsetTop = $stickyElement.offset().top;
+            $(window).scroll(function (event) {
+                if (settings.minimalViewportWidth == 0 || verge.viewportW() < settings.minimalViewportWidth) {
+                    var scrollbarVerticalPosition = $body.scrollTop();
 
-        var stickyTargetVal = $stickyElement.data('sticky').target;
-        if (stickyTargetVal) {
-            stickyElementHeight = $(stickyTargetVal).height();
-        }
+                    var isSticky = false;
 
-        var stickyMinTopVal = $stickyElement.data('sticky').minTop;
-        if (stickyMinTopVal) {
-            stickyMinTop = stickyMinTopVal;
-        } else {
-            stickyMinTop = offsetTop;
-        }
+                    if (scrollbarVerticalPosition <= settings.minTop
+                        || settings.type == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
 
-        var stickyTypeVal = $stickyElement.data('sticky').type;
-        if (stickyTypeVal) {
-            stickyType = stickyTypeVal;
-        }
+                        // Scrolled to top or Scrolling down
+                        isSticky = false;
 
-        var stickyTimeoutVal = $stickyElement.data('sticky').timeout;
-        if (stickyTimeoutVal) {
-            stickyTimeout = stickyTimeoutVal;
-        }
-
-        var minimalStickyViewportWidthVal = $stickyElement.data('sticky').width;
-        if (typeof minimalStickyViewportWidthVal == 'integer') {
-            minimalStickyViewportWidth = minimalStickyViewportWidthVal;
-        }
-
-        $(window).scroll(function (event) {
-            if (minimalStickyViewportWidth == 0 || verge.viewportW() < minimalStickyViewportWidth) {
-                var scrollbarVerticalPosition = $(this).scrollTop();
-
-                if (scrollbarVerticalPosition <= stickyMinTop
-                    || stickyType == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
-                    // Scrolled to top or Scrolling down
-                    makeSticky($stickyElement, $body, false);
-
-                    if (scrollbarVerticalPosition <= stickyMinTop) {
-                        $body.addClass('sticky-top');
-                        $stickyElement.removeClass("sticky-wrapper");
-                        $body.css('padding-top', 0);
+                        if (scrollbarVerticalPosition <= settings.minTop) {
+                            // Scrolled to top
+                            $body.addClass(settings.scrollTopClass);
+                            $element.removeClass(settings.stickyWrapperClass);
+                            $body.css('padding-top', 0);
+                        } else {
+                            // Scrolled not to top
+                            $body.removeClass(settings.scrollTopClass);
+                            $element.addClass(settings.stickyWrapperClass);
+                            $body.css('padding-top', stickyElementHeight);
+                        }
                     } else {
-                        $body.removeClass('sticky-top');
-                        $stickyElement.addClass("sticky-wrapper");
-                        $body.css('padding-top', stickyElementHeight);
+
+                        // Scrolling up
+                        isSticky = true;
+                        $element.addClass(settings.stickyWrapperClass);
                     }
-                } else {
-                    // Scrolling up
-                    makeSticky($stickyElement, $body, true);
-                    $stickyElement.addClass("sticky-wrapper");
+
+                    scrollbarPreviousVerticalPosition = scrollbarVerticalPosition;
+
+                    if (isCurrentlySticky == isSticky) {
+                        return;
+                    }
+
+                    if (intervalId) {
+                        clearTimeout(intervalId);
+                    }
+
+                    // todo: extract library-specific css to separate file
+                    // todo: add animation to css
+
+                    if (isSticky) {
+                        intervalId = setTimeout(function () {
+                            $element.addClass(settings.isStickyClass);
+                        }, settings.timeout);
+                    } else {
+                        intervalId = setTimeout(function () {
+                            $element.removeClass(settings.isStickyClass);
+                        }, settings.timeout);
+                    }
+
+                    isCurrentlySticky = isSticky;
                 }
-                scrollbarPreviousVerticalPosition = scrollbarVerticalPosition;
-            }
+            });
         });
-    })
-}(jQuery, verge, document));
+    };
+}( jQuery, verge, document));
