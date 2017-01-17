@@ -1,25 +1,6 @@
 var verge = require('verge');
 var jQuery = require('jquery');
 
-/**
- * Makes element sticky for mobile devices
- *
- * Depends on jquery.js, verge.js
- *
- * Usage:
- *
- * with default configuration:
- * <header id="header" data-sticky>
- *
- * custom configuration:
- * <header id="header"
- * data-sticky='{
- *  "type":"scroll-top|always",
- *  "timeout":"100",
- *  "width":"767"
- * }'>
- */
-
 ;(function($, verge, document) {
 
     // todo: extract to separate magento module
@@ -32,7 +13,7 @@ var jQuery = require('jquery');
     var stickyType = "scroll-top";
     var stickyTimer = false;
     var isCurrentlySticky = true;
-    var minimalStickyViewportWidth = 767;
+    var minimalStickyViewportWidth = 0;
     var stickyTimeout = 100;
 
     /**
@@ -71,7 +52,13 @@ var jQuery = require('jquery');
 
     $(document).ready(function ($) {
         var $stickyElement = $("[data-sticky]"),
+            $body = $('body'),
             stickyElementHeight = $stickyElement.height();
+
+        var stickyTargetVal = $stickyElement.data('sticky').target;
+        if (stickyTargetVal) {
+            stickyElementHeight = $(stickyTargetVal).height();
+        }
 
         var stickyTypeVal = $stickyElement.data('sticky').type;
         if (stickyTypeVal) {
@@ -84,11 +71,9 @@ var jQuery = require('jquery');
         }
 
         var minimalStickyViewportWidthVal = $stickyElement.data('sticky').width;
-        if (minimalStickyViewportWidthVal) {
+        if (typeof minimalStickyViewportWidthVal == 'integer') {
             minimalStickyViewportWidth = minimalStickyViewportWidthVal;
         }
-
-        var $body = $('body');
 
         $(window).scroll(function (event) {
             if (minimalStickyViewportWidth == 0 || verge.viewportW() < minimalStickyViewportWidth) {
@@ -98,6 +83,11 @@ var jQuery = require('jquery');
                     || stickyType == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
                     // Scrolled to top or Scrolling down
                     makeSticky($stickyElement, $body, false);
+                    if (scrollbarVerticalPosition <= stickyElementHeight) {
+                        $body.addClass('sticky-top');
+                    } else {
+                        $body.removeClass('sticky-top');
+                    }
                 } else {
                     // Scrolling up
                     makeSticky($stickyElement, $body, true);
