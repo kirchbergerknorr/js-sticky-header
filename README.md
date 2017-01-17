@@ -11,7 +11,7 @@ Example of `package.json`:
 ```
 {
   "dependencies": {
-    "js-sticky-header": "git://github.com/kirchbergerknorr/js-sticky-header.git#0.1.2"
+    "js-sticky-header": "git://github.com/kirchbergerknorr/js-sticky-header.git#0.1.3"
   }
 }
 ```
@@ -28,15 +28,15 @@ Add to your project `composer.json`:
 
 ```
 "scripts": {
-  "post-update-cmd":"cd src/skin/frontend/your-design-package/your-theme/ && npm i && browserify js/main.js -o js/bundle.js"
+  "post-update-cmd":"cd src/skin/frontend/your-design-package/your-theme/ && npm i && browserify js/main.js -o js/bundle-main.js"
 }
 ```
 
-This will install dependencies in your theme, read all dependencies from `package.json` and merge js files in `bundle.js`.
-You have to include only `bundle.js` in your phtml:
+This will install dependencies in your theme, read all dependencies from `package.json` and merge js files in `bundle-main.js`.
+You have to include only `bundle-main.js` in your phtml:
 
 ```
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/bundle.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/bundle-main.js') ?>"></script>
 ```
 
 ## Usage
@@ -51,5 +51,6 @@ Custom configuration:
       data-sticky='{
         "type":"scroll-top|always",
         "timeout":"100",
-        "width":"767"
+        "width":"0",
+        "target":""
        }'>
