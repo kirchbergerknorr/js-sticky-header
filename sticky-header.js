@@ -52,9 +52,7 @@ var jQuery = require('jquery');
         // todo: make it work with multiple elements
         var $stickyElement = $("[data-sticky]"),
             $body = $('body');
-        
-        $stickyElement.addClass("sticky-wrapper");
-        
+       
         stickyElementHeight = $stickyElement.height();
 
         var stickyTargetVal = $stickyElement.data('sticky').target;
@@ -95,12 +93,15 @@ var jQuery = require('jquery');
 
                     if (scrollbarVerticalPosition <= stickyElementHeight) {
                         $body.addClass('sticky-top');
+                        $stickyElement.removeClass("sticky-wrapper");
                     } else {
                         $body.removeClass('sticky-top');
+                        $stickyElement.addClass("sticky-wrapper");                        
                     }
                 } else {
                     // Scrolling up
                     makeSticky($stickyElement, $body, true);
+                    $stickyElement.addClass("sticky-wrapper");
                 }
                 scrollbarPreviousVerticalPosition = scrollbarVerticalPosition;
             }
