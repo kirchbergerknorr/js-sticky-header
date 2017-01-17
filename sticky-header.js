@@ -2,12 +2,8 @@ var verge = require('verge');
 var jQuery = require('jquery');
 
 ;(function($, verge, document) {
-
-    // todo: extract to separate magento module
-
-    // todo: idea: make configurable in backend instead of html markup,
-    //             so you can define element id in backend
-
+    // todo: convert to jQuery plugin
+    
     var scrollbarPreviousVerticalPosition;
 
     var stickyType = "scroll-top";
@@ -53,6 +49,7 @@ var jQuery = require('jquery');
     }
 
     $(document).ready(function ($) {
+        // todo: make it work with multiple elements
         var $stickyElement = $("[data-sticky]"),
             $body = $('body');
 
