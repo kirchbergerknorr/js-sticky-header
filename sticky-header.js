@@ -97,6 +97,7 @@ var jQuery = require('jquery');
                         $stickyElement.removeClass("sticky-wrapper");
                     } else {
                         $body.removeClass('sticky-top');
+                        $body.css('padding-top', stickyElementHeight);
                         $stickyElement.addClass("sticky-wrapper");                        
                     }
                 } else {
