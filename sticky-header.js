@@ -52,7 +52,9 @@ var jQuery = require('jquery');
         // todo: make it work with multiple elements
         var $stickyElement = $("[data-sticky]"),
             $body = $('body');
-
+        
+        $stickyElement.addClass("sticky-wrapper");
+        
         stickyElementHeight = $stickyElement.height();
 
         var stickyTargetVal = $stickyElement.data('sticky').target;
