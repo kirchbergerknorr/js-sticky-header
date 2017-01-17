@@ -47,12 +47,26 @@ You have to include only `bundle-main.js` in your phtml:
 ## Usage
 
     $(document).ready(function ($) {
-        $('header').sticky();
+        $('.sticky').sticky();
     });
     
+**css**
+
+Your css should contain the following lines: (you can specify the classNames in js):
+
+    .your-sticky-element {
+        top: 0;
+        width: 100%;
+        height: 100px;
+    }
+
+    .sticky-wrapper {
+        position: fixed;
+    }
+
 ## Configuration
 
-    $('header').sticky({
+    $('.sticky').sticky({
         type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
         minimalViewportWidth: 0,             // at what device width trigger sticky
         timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
