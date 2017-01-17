@@ -52,5 +52,14 @@ Custom configuration:
         "type":"scroll-top|always",
         "timeout":"100",
         "width":"0",
-        "target":""
+        "target":"",
+        "minTop":"0"
        }'>
+
+## Configuration
+
+- `type` - trigger sticky `always` or only on `scroll-top`
+- `timeout` - pause before trigger sticky (bugfix)
+- `width` - at what device width trigger sticky
+- `minTop` - at what scroll top position trigger sticky
+- `target` - which element height use as minTop value, empty value is this element
