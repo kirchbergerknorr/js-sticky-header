@@ -36,11 +36,9 @@ var jQuery = require('jquery');
         if (isSticky) {
             stickyTimer = setTimeout(function () {
                 $element.addClass("is-sticky");
-                $body.css('padding-top', stickyElementHeight);
             }, stickyTimeout);
         } else {
             stickyTimer = setTimeout(function () {
-                $body.css('padding-top', stickyElementHeight);
                 $element.removeClass("is-sticky");
             }, stickyTimeout);
         }
@@ -54,6 +52,7 @@ var jQuery = require('jquery');
             $body = $('body');
        
         stickyElementHeight = $stickyElement.height();
+        var offsetTop = $stickyElement.offset().top;
 
         var stickyTargetVal = $stickyElement.data('sticky').target;
         if (stickyTargetVal) {
@@ -64,7 +63,7 @@ var jQuery = require('jquery');
         if (stickyMinTopVal) {
             stickyMinTop = stickyMinTopVal;
         } else {
-            stickyMinTop = stickyElementHeight;
+            stickyMinTop = offsetTop;
         }
 
         var stickyTypeVal = $stickyElement.data('sticky').type;
@@ -91,14 +90,14 @@ var jQuery = require('jquery');
                     // Scrolled to top or Scrolling down
                     makeSticky($stickyElement, $body, false);
 
-                    if (scrollbarVerticalPosition <= stickyElementHeight) {
+                    if (scrollbarVerticalPosition <= stickyMinTop) {
                         $body.addClass('sticky-top');
-                        $body.css('padding-top', 0);
                         $stickyElement.removeClass("sticky-wrapper");
+                        $body.css('padding-top', 0);
                     } else {
                         $body.removeClass('sticky-top');
+                        $stickyElement.addClass("sticky-wrapper");
                         $body.css('padding-top', stickyElementHeight);
-                        $stickyElement.addClass("sticky-wrapper");                        
                     }
                 } else {
                     // Scrolling up
