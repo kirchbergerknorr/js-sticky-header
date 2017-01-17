@@ -41,25 +41,19 @@ You have to include only `bundle-main.js` in your phtml:
 
 ## Usage
 
-Default configuration:
-
-    <header id="header" data-sticky>
-
-Custom configuration:
-
-    <header id="header"
-      data-sticky='{
-        "type":"scroll-top|always",
-        "timeout":"100",
-        "width":"0",
-        "target":"",
-        "minTop":"0"
-       }'>
-
+    $(document).ready(function ($) {
+        $('header').sticky();
+    });
+    
 ## Configuration
 
-- `type` - trigger sticky `always` or only on `scroll-top`
-- `timeout` - pause before trigger sticky (bugfix)
-- `width` - at what device width trigger sticky
-- `minTop` - at what scroll top position trigger sticky
-- `target` - which element height use as minTop value, empty value is this element
+    $('header').sticky({
+        type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
+        minimalViewportWidth: 0,             // at what device width trigger sticky
+        timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
+        targetElement: '',                   // which element height use as minTop value, empty value is this element
+        minTop: 0,                           // at what scroll top position trigger sticky
+        isStickyClass: 'is-sticky',
+        stickyWrapperClass: 'sticky-wrapper',
+        scrollTopClass: 'scroll-top'
+    });
