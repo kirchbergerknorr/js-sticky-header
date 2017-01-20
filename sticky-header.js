@@ -95,7 +95,6 @@ var jQuery = require('jquery');
                 $element.hover(function () {
                     $element.addClass(settings.hoverClass);
                 }, function () {
-                    console.log('unhover');
                     $element.removeClass(settings.hoverClass);
                     update();
                 })
