@@ -7,19 +7,20 @@
             margin: 0;
             padding: 0;
         }
-        header{
-            width: 100%;
+        header {
             text-align: center;
             font-size: 72px;
             line-height: 108px;
-            height: 108px;
             background: #335C7D;
             color: #fff;
             font-family: 'PT Sans', sans-serif;
+
             -webkit-transition: top 700ms;
             -moz-transition: top 700ms;
             transition: top 700ms;
             position: relative;
+            width: 100%;
+            height: 108px;
         }
         .content {
             height: 1000px;
@@ -34,13 +35,13 @@
             width: 100%;
             top: 100px;
         }
-        .is-sticky {
-            box-shadow: 0 1px 10px #333;
-            top: 0 !important;
-        }
         .sticky-wrapper {
             position: fixed;
-            top: -300px;
+            top: -108px;
+        }
+        .sticky-wrapper.is-sticky {
+            box-shadow: 0 1px 10px #333;
+            top: 0;
         }
         .pre-header {
             height: 100px;

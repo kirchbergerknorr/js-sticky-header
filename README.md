@@ -66,22 +66,33 @@ Your css should contain the following lines: (you can specify the classNames in 
 
 ```css
 .your-sticky-element {
-    top: 0;
-    width: 100%;
-    height: 100px;
+    height: 108px;
+    
+    -webkit-transition: top 700ms;
+    -moz-transition: top 700ms;
+    transition: top 700ms;
+     
+    width: 100%;     
 }
 
 .sticky-wrapper {
     position: fixed;
+    top: -108px; 
+}
+
+.sticky-wrapper.is-sticky {
+    top: 0;
 }
 ```
+
+Attribute `top` in `.sticky-wrapper` should be the same as `height` of your element and used for css animation.
 
 ## Configuration
 
 ```js
 $('.sticky').sticky({
     type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
-    stickyOnHover: true,                 // triggers hoverClass on hover of the $element
+    stickyOnHover: true,                 // trigger hoverClass on hover of the $element
                                          // $element remains sticky if stickyOnHover true 
     minimalViewportWidth: 0,             // at what device width trigger sticky
     timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
