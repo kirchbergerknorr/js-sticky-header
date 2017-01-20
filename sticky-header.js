@@ -15,11 +15,11 @@ var jQuery = require('jquery');
             scrollTopClass: 'scroll-top'
         }, options );
 
-        var intervalId = false;
-        var isCurrentlySticky = false;
-        var scrollbarPreviousVerticalPosition = 0;
-
         return this.each(function() {
+
+            var intervalId = false;
+            var isCurrentlySticky = false;
+            var scrollbarPreviousVerticalPosition = 0;
 
             var $element = $(this);
             var $body = $('body');
@@ -30,36 +30,29 @@ var jQuery = require('jquery');
                 + parseInt($(targetElement).css('margin-bottom').replace('px', ''))
                 + parseInt($(targetElement).css('margin-top').replace('px', ''));
 
-            var minTop = settings.minTop || $(targetElement).offset().top + stickyElementHeight;
+            var minTop = settings.minTop;
+            if (!minTop) {
+                if (settings.type == 'scroll-top') {
+                    minTop = $(targetElement).offset().top + stickyElementHeight;
+                } else {
+                    minTop = $(targetElement).offset().top;
+                }
+            }
 
             $(window).scroll(function (event) {
                 if (settings.minimalViewportWidth == 0 || verge.viewportW() < settings.minimalViewportWidth) {
                     var scrollbarVerticalPosition = $body.scrollTop();
 
                     var isSticky = false;
+                    var isScrollingDown = scrollbarVerticalPosition > scrollbarPreviousVerticalPosition;
+                    var isVisible = scrollbarVerticalPosition <= minTop;
 
-                    if (scrollbarVerticalPosition <= minTop
-                        || settings.type == 'scroll-top' && scrollbarVerticalPosition > scrollbarPreviousVerticalPosition) {
-
-                        // Scrolled to top or Scrolling down
+                    if (isVisible) {
                         isSticky = false;
-
-                        if (scrollbarVerticalPosition <= minTop) {
-                            // Scrolled to top
-                            $body.addClass(settings.scrollTopClass);
-                            $element.removeClass(settings.stickyWrapperClass);
-                            $body.css('padding-top', 0);
-                        } else {
-                            // Scrolled not to top
-                            $body.removeClass(settings.scrollTopClass);
-                            $element.addClass(settings.stickyWrapperClass);
-                            $body.css('padding-top', stickyElementHeight);
-                        }
+                    } else if (isScrollingDown) {
+                        isSticky = (settings.type == 'always');
                     } else {
-
-                        // Scrolling up
                         isSticky = true;
-                        $element.addClass(settings.stickyWrapperClass);
                     }
 
                     scrollbarPreviousVerticalPosition = scrollbarVerticalPosition;
@@ -72,16 +65,19 @@ var jQuery = require('jquery');
                         clearTimeout(intervalId);
                     }
 
-                    // todo: extract library-specific css to separate file
-                    // todo: add animation to css
-
                     if (isSticky) {
                         intervalId = setTimeout(function () {
                             $element.addClass(settings.isStickyClass);
+                            $element.addClass(settings.stickyWrapperClass);
+                            $body.removeClass(settings.scrollTopClass);
+                            $body.css('padding-top', stickyElementHeight);
                         }, settings.timeout);
                     } else {
                         intervalId = setTimeout(function () {
                             $element.removeClass(settings.isStickyClass);
+                            $element.removeClass(settings.stickyWrapperClass);
+                            $body.addClass(settings.scrollTopClass);
+                            $body.css('padding-top', 0);
                         }, settings.timeout);
                     }
 
