@@ -25,11 +25,12 @@ var jQuery = require('jquery');
             var $body = $('body');
 
             var targetElement = settings.targetElement || this;
-            var minTop = settings.minTop || $(targetElement).offset().top;
+            
+            var stickyElementHeight = $(targetElement).height()
+                + parseInt($(targetElement).css('margin-bottom').replace('px', ''))
+                + parseInt($(targetElement).css('margin-top').replace('px', ''));
 
-            var stickyElementHeight = $(settings.targetElement).height()
-                + parseInt($(settings.targetElement).css('margin-bottom').replace('px', ''))
-                + parseInt($(settings.targetElement).css('margin-top').replace('px', ''));
+            var minTop = settings.minTop || $(targetElement).offset().top + stickyElementHeight;
 
             $(window).scroll(function (event) {
                 if (settings.minimalViewportWidth == 0 || verge.viewportW() < settings.minimalViewportWidth) {
