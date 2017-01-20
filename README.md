@@ -81,7 +81,7 @@ Your css should contain the following lines: (you can specify the classNames in 
 ```js
     $('.sticky').sticky({
         type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
-        stickyOnHover: true                  // triggers hoverClass on hover of the $element
+        stickyOnHover: true,                 // triggers hoverClass on hover of the $element
                                              // $element remains sticky if stickyOnHover true 
         minimalViewportWidth: 0,             // at what device width trigger sticky
         timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
@@ -90,7 +90,6 @@ Your css should contain the following lines: (you can specify the classNames in 
         isStickyClass: 'is-sticky',
         stickyWrapperClass: 'sticky-wrapper',
         scrollTopClass: 'scroll-top',
-        hoverClass: 'sticky-hover',          
-        
+        hoverClass: 'sticky-hover' 
     });
 ```
