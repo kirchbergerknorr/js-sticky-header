@@ -1,6 +1,6 @@
 # js-sticky-header
 
-Makes element sticky for mobile devices
+Makes element sticky on scroll
 
 ## Installation for Magento Theme
 
@@ -8,7 +8,7 @@ Create `src/skin/frontend/your-design-package/your-theme/package.json` file.
 
 Example of `package.json`:
 
-```js
+```json
 {
   "dependencies": {
     "js-sticky-header": "git://github.com/kirchbergerknorr/js-sticky-header.git#1.1.0"
@@ -55,9 +55,9 @@ or add in layout:
 ## Usage
 
 ```js
-    $(document).ready(function ($) {
-        $('.sticky').sticky();
-    });
+$(document).ready(function ($) {
+    $('.sticky').sticky();
+});
 ```
     
 **css**
@@ -65,31 +65,31 @@ or add in layout:
 Your css should contain the following lines: (you can specify the classNames in js):
 
 ```css
-    .your-sticky-element {
-        top: 0;
-        width: 100%;
-        height: 100px;
-    }
+.your-sticky-element {
+    top: 0;
+    width: 100%;
+    height: 100px;
+}
 
-    .sticky-wrapper {
-        position: fixed;
-    }
+.sticky-wrapper {
+    position: fixed;
+}
 ```
 
 ## Configuration
 
 ```js
-    $('.sticky').sticky({
-        type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
-        stickyOnHover: true,                 // triggers hoverClass on hover of the $element
-                                             // $element remains sticky if stickyOnHover true 
-        minimalViewportWidth: 0,             // at what device width trigger sticky
-        timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
-        targetElement: '',                   // which element height use as minTop value, empty value is this element
-        minTop: 0,                           // at what scroll top position trigger sticky
-        isStickyClass: 'is-sticky',
-        stickyWrapperClass: 'sticky-wrapper',
-        scrollTopClass: 'scroll-top',
-        hoverClass: 'sticky-hover' 
-    });
+$('.sticky').sticky({
+    type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
+    stickyOnHover: true,                 // triggers hoverClass on hover of the $element
+                                         // $element remains sticky if stickyOnHover true 
+    minimalViewportWidth: 0,             // at what device width trigger sticky
+    timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
+    targetElement: '',                   // which element height use as minTop value, empty value is this element
+    minTop: 0,                           // at what scroll top position trigger sticky
+    isStickyClass: 'is-sticky',
+    stickyWrapperClass: 'sticky-wrapper',
+    scrollTopClass: 'scroll-top',
+    hoverClass: 'sticky-hover' 
+});
 ```
