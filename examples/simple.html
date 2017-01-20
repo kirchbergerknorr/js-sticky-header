@@ -16,11 +16,10 @@
             background: #335C7D;
             color: #fff;
             font-family: 'PT Sans', sans-serif;
-            -webkit-transition: top .33s ease-in-out;
-            -moz-transition: top .33s ease-in-out;
-            transition: top .33s ease-in-out;
+            -webkit-transition: top 700ms;
+            -moz-transition: top 700ms;
+            transition: top 700ms;
             position: relative;
-            top: 0;
         }
         .content {
             height: 1000px;
@@ -37,7 +36,11 @@
         }
         .is-sticky {
             box-shadow: 0 1px 10px #333;
+            top: 0 !important;
+        }
+        .sticky-wrapper {
             position: fixed;
+            top: -300px;
         }
         .pre-header {
             height: 100px;

@@ -18,7 +18,8 @@ var jQuery = require('jquery');
         return this.each(function() {
 
             var intervalId = false;
-            var isCurrentlySticky = false;
+            var isCurrentlySticky = null;
+            var isCurrentlyVisible = null;
             var scrollbarPreviousVerticalPosition = 0;
 
             var $element = $(this);
@@ -30,14 +31,7 @@ var jQuery = require('jquery');
                 + parseInt($(targetElement).css('margin-bottom').replace('px', ''))
                 + parseInt($(targetElement).css('margin-top').replace('px', ''));
 
-            var minTop = settings.minTop;
-            if (!minTop) {
-                if (settings.type == 'scroll-top') {
-                    minTop = $(targetElement).offset().top + stickyElementHeight;
-                } else {
-                    minTop = $(targetElement).offset().top;
-                }
-            }
+            var minTop = settings.minTop || $(targetElement).offset().top;
 
             $(window).scroll(function (event) {
                 if (settings.minimalViewportWidth == 0 || verge.viewportW() < settings.minimalViewportWidth) {
@@ -46,18 +40,19 @@ var jQuery = require('jquery');
                     var isSticky = false;
                     var isScrollingDown = scrollbarVerticalPosition > scrollbarPreviousVerticalPosition;
                     var isVisible = scrollbarVerticalPosition <= minTop;
+                    var isVisibleSticky = scrollbarVerticalPosition <= minTop + stickyElementHeight;
 
                     if (isVisible) {
                         isSticky = false;
                     } else if (isScrollingDown) {
-                        isSticky = (settings.type == 'always');
+                        isSticky = (settings.type == 'always') || isVisibleSticky;
                     } else {
                         isSticky = true;
                     }
 
                     scrollbarPreviousVerticalPosition = scrollbarVerticalPosition;
 
-                    if (isCurrentlySticky == isSticky) {
+                    if (isCurrentlySticky == isSticky && isCurrentlyVisible == isVisible) {
                         return;
                     }
 
@@ -65,23 +60,26 @@ var jQuery = require('jquery');
                         clearTimeout(intervalId);
                     }
 
-                    if (isSticky) {
-                        intervalId = setTimeout(function () {
+                    intervalId = setTimeout(function () {
+                        if (isSticky) {
                             $element.addClass(settings.isStickyClass);
-                            $element.addClass(settings.stickyWrapperClass);
-                            $body.removeClass(settings.scrollTopClass);
-                            $body.css('padding-top', stickyElementHeight);
-                        }, settings.timeout);
-                    } else {
-                        intervalId = setTimeout(function () {
+                        } else {
                             $element.removeClass(settings.isStickyClass);
-                            $element.removeClass(settings.stickyWrapperClass);
+                        }
+
+                        if (isVisible) {
                             $body.addClass(settings.scrollTopClass);
                             $body.css('padding-top', 0);
-                        }, settings.timeout);
-                    }
+                            $element.removeClass(settings.stickyWrapperClass);
+                        } else {
+                            $body.removeClass(settings.scrollTopClass);
+                            $body.css('padding-top', stickyElementHeight);
+                            $element.addClass(settings.stickyWrapperClass);
+                        }
+                    }, settings.timeout);
 
                     isCurrentlySticky = isSticky;
+                    isCurrentlyVisible = isVisible;
                 }
             });
         });
