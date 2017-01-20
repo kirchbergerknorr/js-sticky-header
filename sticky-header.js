@@ -31,9 +31,9 @@ var jQuery = require('jquery');
 
             var minTop = settings.minTop || $(targetElement).offset().top;
 
-            var stickyElementHeight = $(targetElement).height()
-                + parseInt($(targetElement).css('margin-bottom').replace('px', ''))
-                + parseInt($(targetElement).css('margin-top').replace('px', ''));
+            var stickyElementHeight = $element.height()
+                + parseInt($element.css('margin-bottom').replace('px', ''))
+                + parseInt($element.css('margin-top').replace('px', ''));
 
             function update() {
                 if (settings.minimalViewportWidth > 0 && verge.viewportW() > settings.minimalViewportWidth) {
