@@ -11,7 +11,7 @@ Example of `package.json`:
 ```
 {
   "dependencies": {
-    "js-sticky-header": "git://github.com/kirchbergerknorr/js-sticky-header.git#0.1.3"
+    "js-sticky-header": "git://github.com/kirchbergerknorr/js-sticky-header.git#1.1.0"
   }
 }
 ```
@@ -25,23 +25,30 @@ var $ = require('jquery');
 require('js-sticky-header');
 
 $(document).ready(function ($) {
-    $('header').sticky();
+    $('.sticky').sticky();
 });
 ```
 
-Add to your project `composer.json`:
-
-```
-"scripts": {
-  "post-update-cmd":"cd src/skin/frontend/your-design-package/your-theme/ && npm i && browserify js/main.js -o js/bundle-main.js"
-}
-```
-
+Add to your project [gulpfile.js](gulpfile.js), see `build` task.
+  
 This will install dependencies in your theme, read all dependencies from `package.json` and merge js files in `bundle-main.js`.
 You have to include only `bundle-main.js` in your phtml:
 
 ```
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/bundle-main.js') ?>"></script>
+```
+
+or add in layout: 
+
+```
+<layout version="0.1.0">
+    <default> 
+        <reference name="head">
+            <!-- Created by Browserify -->
+            <action method="addItem"><type>skin_js</type><name>js/bundle-main.js</name></action>
+        </reference>
+    </default>
+</layout>    
 ```
 
 ## Usage
@@ -68,11 +75,15 @@ Your css should contain the following lines: (you can specify the classNames in 
 
     $('.sticky').sticky({
         type: "scroll-top",                  // trigger sticky `always` or only on `scroll-top`
+        stickyOnHover: true                  // triggers hoverClass on hover of the $element
+                                             // $element remains sticky if stickyOnHover true 
         minimalViewportWidth: 0,             // at what device width trigger sticky
         timeout: 100,                        // pause before trigger sticky (iPhone bugfix)
         targetElement: '',                   // which element height use as minTop value, empty value is this element
         minTop: 0,                           // at what scroll top position trigger sticky
         isStickyClass: 'is-sticky',
         stickyWrapperClass: 'sticky-wrapper',
-        scrollTopClass: 'scroll-top'
+        scrollTopClass: 'scroll-top',
+        hoverClass: 'sticky-hover',          
+        
     });
