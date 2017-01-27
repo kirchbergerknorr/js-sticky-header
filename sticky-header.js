@@ -29,12 +29,18 @@ var jQuery = require('jquery');
 
             var targetElement = settings.targetElement || this;
 
-            var minTop = settings.minTop || $(targetElement).offset().top;
-
             var stickyElementHeight = $element.height()
                 + parseInt($element.css('margin-bottom').replace('px', ''))
                 + parseInt($element.css('margin-top').replace('px', ''));
-
+            
+            var minTop = settings.minTop;
+            
+            if (!minTop) {
+                minTop = stickyElementHeight;
+            } else if (settings.targetElement) {
+                 minTop = $(targetElement).offset().top;
+            }                
+            
             function update() {
                 if (settings.minimalViewportWidth > 0 && verge.viewportW() > settings.minimalViewportWidth) {
                     return false;
