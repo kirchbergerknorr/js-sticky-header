@@ -46,7 +46,7 @@ var jQuery = require('jquery');
                     return false;
                 }
 
-                var scrollbarVerticalPosition = $body.scrollTop();
+                var scrollbarVerticalPosition = $(window).scrollTop();
 
                 var isSticky = false;
                 var isScrollingDown = scrollbarVerticalPosition > scrollbarPreviousVerticalPosition;
